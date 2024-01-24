@@ -15,6 +15,8 @@ export async function setup_intro_information_1() {
     })
 }
 
+let finished_questions = new Set<number>()
+
 export async function setup_main_question(data_i: number) {
     let data_now = globalThis.data[data_i];
     globalThis.time_start = Date.now()
@@ -30,24 +32,45 @@ export async function setup_main_question(data_i: number) {
         data_now["current_utterance"] + "</span>"
     ) + (
         "<br><br><b>Current step:</b> " + 
-        data_now["current_utterance"] + "</span>"
+        data_now["solution_step"] + "</span>"
     )
     html = html.replace("{{SENTENCE}}", styled_utterance)
 
 
     let check_brighten_navigator_button = () => {
+        let is_finished = Object.keys(globalThis.data_log[data_i]["answer"]).length == 4
         $(`#navigator_button_${data_i}`).toggleClass(
             "navigator_button_finished",
-            Object.keys(globalThis.data_log[data_i]["answer"]).length == 4
+            is_finished
         )
+        if (is_finished) {
+            finished_questions.add(data_i)
+            if (finished_questions.size == globalThis.data.length) {
+                $("#finish_study").removeAttr("disabled")
+            }
+        } else {
+            $("#finish_study").attr("disabled", "disabled")
+            if (finished_questions.has(data_i)) {
+                finished_questions.delete(data_i)
+            }
+        }
     }
 
     let html_buttons = ""
 
     function setup_button_hook_static(id_name: string, label_name: string) {
+        let extra_class_no = ""
+        let extra_class_yes = ""
+        if (globalThis.data_log[data_i]["answer"].hasOwnProperty(id_name)) {
+            if(globalThis.data_log[data_i]["answer"][id_name]) {
+                extra_class_yes = "button_selected"
+            } else {
+                extra_class_no = "button_selected"
+            }
+        }
         html_buttons += `<span class="label_span">${label_name}:</span> `
-        html_buttons += `<input type="button" id_val="${id_name}" value="Yes" id="${id_name}_yes" class="button_yes"> `
-        html_buttons += `<input type="button" id_val="${id_name}" value="No" id="${id_name}_no" class="button_no"> `
+        html_buttons += `<input type="button" id_val="${id_name}" value="Yes" id="${id_name}_yes" class="button_yes ${extra_class_yes}"> `
+        html_buttons += `<input type="button" id_val="${id_name}" value="No" id="${id_name}_no" class="button_no ${extra_class_no}"> `
         html_buttons += "\n"
     }
 
@@ -68,9 +91,9 @@ export async function setup_main_question(data_i: number) {
         el_button.on("click", () => {
             el_button.addClass("button_selected");
             $(`#${id_val}_no`).removeClass("button_selected");
-            console.log(`#${id_val}_no`)
             globalThis.data_log[data_i]["answer"][id_val] = true
             check_brighten_navigator_button()
+            log_data(data_i)
         })
     })
     $(".button_no").each((index, element) => {
@@ -81,6 +104,7 @@ export async function setup_main_question(data_i: number) {
             $(`#${id_val}_yes`).removeClass("button_selected");
             globalThis.data_log[data_i]["answer"][id_val] = false
             check_brighten_navigator_button()
+            log_data(data_i)
         })
     })
 }
@@ -88,7 +112,7 @@ export async function setup_main_question(data_i: number) {
 export async function setup_navigator() {
     globalThis.data_log = {}
     globalThis.data.forEach((element, element_i) => {
-        globalThis.data_log[element_i] = {"question": element["question"], "answer": new Array<string>()}
+        globalThis.data_log[element_i] = {"question": element["question"], "answer": {}}
     })
     let buttons = globalThis.data.map((element, element_i) => {
         return `<input type="button" class="navigator_button" value="${element_i+1}" id="navigator_button_${element_i}">`

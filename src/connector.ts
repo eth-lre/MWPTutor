@@ -20,6 +20,7 @@ export async function load_data(): Promise<any> {
 }
 
 export async function log_data(data_i: number): Promise<any> {
+    console.log(globalThis.data_log[data_i]["answer"])
     let data = {
         "data_i": data_i,
         "answer": globalThis.data_log[data_i]["answer"],
@@ -36,8 +37,6 @@ export async function log_data(data_i: number): Promise<any> {
             "study_id": globalThis.study_id,
         },
     }
-
-    console.log(data)
 
     let result = await $.ajax(
         SERVER_LOG_ROOT + "log",
