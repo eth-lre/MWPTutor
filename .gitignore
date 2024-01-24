@@ -1,0 +1,9 @@
+*.csv
+package-lock.json
+node_modules
+web/web-source.js
+web/queues
+web/queues_*
+data
+images
+texts
