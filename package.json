@@ -16,9 +16,5 @@
     "dev": "webpack-dev-server --mode=development --open",
     "dev_prod": "webpack-dev-server --mode=production --open"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/zouharvi/abstract-to-title"
-  },
   "dependencies": {}
 }

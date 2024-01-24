@@ -13,6 +13,7 @@ export async function load_data(): Promise<any> {
         }
     )
     result = result.trimEnd()
+    // @ts-ignore
     result = "[" + result.replaceAll("\n", ",") + "]"
     result = JSON.parse(result)
     return result
@@ -42,7 +43,7 @@ export async function log_data(data_i: number): Promise<any> {
         SERVER_LOG_ROOT + "log",
         {
             data: JSON.stringify({
-                project: "evaluating-dialogue-tutors",
+                project: "evaluating-dialogue-quality",
                 uid: globalThis.uid,
                 payload: JSON.stringify(data),
             }),
@@ -62,6 +63,7 @@ export async function get_json(name: string): Promise<Array<object>> {
         }
     )
     result = result.trimEnd()
+    // @ts-ignore
     result = "[" + result.replaceAll("\n", ",") + "]"
     result = JSON.parse(result)
     return result
