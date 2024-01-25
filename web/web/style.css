@@ -2,7 +2,7 @@
     font-family: Roboto, Arial, Helvetica, sans-serif;
 }
 
-#main_text_area, #progress_window, #short_instructions {
+#main_text_area, #progress_window, #short_instructions_prompt, #short_instructions_hint {
     vertical-align: top;
     margin-top: 30px;
     border: 2px solid black;
@@ -45,21 +45,21 @@
     margin-bottom: 8px;
 }
 
-#short_instructions, #progress_window {
+#short_instructions_prompt, #short_instructions_hint, #progress_window {
     padding: 10px;
     width: calc(100% - 40px);
 }
 
-#short_instructions {
+#short_instructions_prompt, #short_instructions_hint {
     height: 395px;
     overflow-y: scroll;
 }
 
-#short_instructions > h3 {
+#short_instructions_hint > h3, #short_instructions_prompt > h3 {
     margin-top: 0px;
 }
 
-#short_instructions > h4 {
+#short_instructions_hint > h4, #short_instructions_prompt > h4 {
     margin-bottom: 0px;
 }
 

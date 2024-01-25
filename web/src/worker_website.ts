@@ -7,10 +7,19 @@ let main_text_area = $("#main_text_area")
 export async function setup_intro_information_1() {
     // hide for now
     $("#side_panel").toggle(false)
-    main_text_area.html(await get_html("instructions_1.html"))
+
+    main_text_area.html(await get_html(`instructions_1_${globalThis.stimulus_type}.html`))
     await timer(10)
     $("#button_start").on("click", () => {
         $("#side_panel").toggle(true)
+    
+        if (globalThis.stimulus_type == "prompt") {
+            $("#short_instructions_prompt").toggle(true)
+            $("#short_instructions_hint").toggle(false)
+        } else if (globalThis.stimulus_type == "hint") {
+            $("#short_instructions_prompt").toggle(false)
+            $("#short_instructions_hint").toggle(true)
+        }
         setup_navigator();
     })
 }

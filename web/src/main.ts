@@ -10,6 +10,7 @@ globalThis.reward = 0
 const urlParams = new URLSearchParams(window.location.search);
 globalThis.uid = urlParams.get('uid')
 globalThis.skip_intro = urlParams.has('skip_intro')
+globalThis.stimulus_type = urlParams.get('stimulus_type') || "prompt"
 
 async function get_uid_and_data() {
     // set to "demo" uid if in devmode and uid doesn't exist
