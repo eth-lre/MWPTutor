@@ -160,7 +160,7 @@ async function load_thankyou() {
     await timer(1000)
 
     let html_text = `Thank you for participating in our study. For any further questions about this project or your data, <a href="mailto:vilem.zouhar@inf.ethz.ch">send us a message</a>.`;
-    html_text += `<br>Please click <a class="button_like" href="https://app.prolific.com/submissions/complete?cc=C6XCI3SV">this link</a> to go back to Prolific. `
-    html_text += `Alternatively use this code <em>C6XCI3SV</em>.`
+    html_text += `<br>Please click <a class="button_like" href="https://app.prolific.com/submissions/complete?cc=CFEUE41O">this link</a> to go back to Prolific. `
+    html_text += `Alternatively use this code <em>CFEUE41O</em>.`
     main_text_area.html(html_text);
 }
