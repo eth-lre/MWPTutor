@@ -14,9 +14,8 @@
 #main_text_area {
     display: inline-block;
     width: 700px;
-    height: 800px;
+    height: auto;
     font-size: 1.1em;
-    overflow-y: scroll;
 }
 
 #side_panel {
@@ -30,7 +29,8 @@
 
 #progress_window {
     height: 190px;
-    margin-bottom: -20px;
+    text-align: left;
+    margin-top: 5px;
 }
 
 #teacher_sentence {

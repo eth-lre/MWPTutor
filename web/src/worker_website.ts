@@ -83,11 +83,19 @@ export async function setup_main_question(data_i: number) {
         html_buttons += "\n"
     }
 
-    setup_button_hook_static("grammatical", "Grammatical")
-    setup_button_hook_static("relevant", "Relevant")
-    html_buttons += "<br>"
-    setup_button_hook_static("redundant", "Not redundat")
-    setup_button_hook_static("not_reveal", "Does not reveal answer")
+    if (globalThis.stimulus_type == "prompt") {
+        setup_button_hook_static("grammatical", "Grammatical")
+        setup_button_hook_static("relevant", "Relevant")
+        html_buttons += "<br>"
+        setup_button_hook_static("redundant", "Not redundant")
+        setup_button_hook_static("not_reveal", "Does not reveal answer")
+    } else if (globalThis.stimulus_type == "hint") {
+        setup_button_hook_static("grammatical", "Grammatical")
+        setup_button_hook_static("specific", "Specific")
+        html_buttons += "<br>"
+        setup_button_hook_static("helpful", "Helpful")
+        setup_button_hook_static("not_reveal", "Does not reveal answer")
+    }
 
     html = html.replace("{{BUTTONS_SECTION}}", html_buttons)
 
@@ -138,9 +146,12 @@ export async function setup_navigator() {
     })
 
     setup_main_question(0)
+
+    $("#finish_study").on("click", load_thankyou)
 }
 
 async function load_thankyou() {
+    $("#side_panel").toggle(false)
     main_text_area.html("Please wait 3s for data synchronization to finish.")
     await timer(1000)
     main_text_area.html("Please wait 2s for data synchronization to finish.")
@@ -149,9 +160,7 @@ async function load_thankyou() {
     await timer(1000)
 
     let html_text = `Thank you for participating in our study. For any further questions about this project or your data, <a href="mailto:vilem.zouhar@inf.ethz.ch">send us a message</a>.`;
-    if (globalThis.prolific_pid != null) {
-        html_text += `<br>Please click <a class="button_like" href="https://app.prolific.com/submissions/complete?cc=C6XCI3SV">this link</a> to go back to Prolific. `
-        html_text += `Alternatively use this code <em>C6XCI3SV</em>.`
-    }
+    html_text += `<br>Please click <a class="button_like" href="https://app.prolific.com/submissions/complete?cc=C6XCI3SV">this link</a> to go back to Prolific. `
+    html_text += `Alternatively use this code <em>C6XCI3SV</em>.`
     main_text_area.html(html_text);
 }

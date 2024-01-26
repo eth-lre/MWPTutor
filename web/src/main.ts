@@ -12,6 +12,11 @@ globalThis.uid = urlParams.get('uid')
 globalThis.skip_intro = urlParams.has('skip_intro')
 globalThis.stimulus_type = urlParams.get('stimulus_type') || "prompt"
 
+if (globalThis.stimulus_type != "prompt" && globalThis.stimulus_type != "hint") {
+    alert("The 'stimulus_type' has to be either 'prompt' or 'hint'. Setting to 'prompt'.");
+    globalThis.stimulus_type = "prompt";
+}
+
 async function get_uid_and_data() {
     // set to "demo" uid if in devmode and uid doesn't exist
     if (DEVMODE && globalThis.uid == null) {
