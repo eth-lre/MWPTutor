@@ -13,7 +13,7 @@
 
 #main_text_area {
     display: inline-block;
-    width: 700px;
+    width: 800px;
     height: auto;
     font-size: 1.1em;
 }
@@ -21,7 +21,7 @@
 #side_panel {
     display: inline-block;
     height: calc(600px + 20px);
-    width: 400px;
+    width: 300px;
     font-size: 10pt;
     padding-top: 0;
     margin-left: 10px;
@@ -52,7 +52,7 @@
 
 #short_instructions {
     height: 395px;
-    overflow-y: scroll;
+    padding-bottom: 0px;
 }
 
 #short_instructions > h3 {
@@ -61,6 +61,10 @@
 
 #short_instructions > h4 {
     margin-bottom: 0px;
+}
+
+#short_instructions > ul {
+    padding-left: 10px;
 }
 
 a {

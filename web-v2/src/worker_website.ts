@@ -51,6 +51,10 @@ export async function setup_main_question(data_i: number) {
             return val
         }).join("<br class='utterance_break'>")
 
+    styled_utterance = (
+        "<b class='spaker_span'>Question:</b>" + data_now["question"] + "<br><br>"  +
+        "<b class='spaker_span'>Correct answer:</b>" + data_now["final_ans"] + "<br><br>"
+    ) + styled_utterance
     html = html.replace("{{SENTENCE}}", styled_utterance)
 
 
