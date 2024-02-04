@@ -1,0 +1,144 @@
+* {
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+}
+
+#main_text_area, #progress_window, #short_instructions {
+    vertical-align: top;
+    margin-top: 30px;
+    border: 2px solid black;
+    padding: 20px;
+    background-color: #fff;
+    text-align: justify;
+}
+
+#main_text_area {
+    display: inline-block;
+    width: 700px;
+    height: auto;
+    font-size: 1.1em;
+}
+
+#side_panel {
+    display: inline-block;
+    height: calc(600px + 20px);
+    width: 400px;
+    font-size: 10pt;
+    padding-top: 0;
+    margin-left: 10px;
+}
+
+#progress_window {
+    height: 190px;
+    text-align: left;
+    margin-top: 5px;
+}
+
+#teacher_sentence {
+    display: inline-block;
+    width: 100%;
+    font-style: italic;
+    vertical-align: middle;
+    text-align: left;
+}
+
+#progress_window input[type="button"] {
+    margin-bottom: 8px;
+}
+
+#short_instructions, #progress_window {
+    padding: 10px;
+    width: calc(100% - 40px);
+}
+
+#short_instructions {
+    height: 395px;
+    overflow-y: scroll;
+}
+
+#short_instructions > h3 {
+    margin-top: 0px;
+}
+
+#short_instructions > h4 {
+    margin-bottom: 0px;
+}
+
+a {
+    color: black;
+    font-weight: bold;
+}
+
+body {
+    text-align: center;
+    margin-bottom: 20px;
+    background-color: #cde;
+}
+
+.navigator_button {
+    width: 30px;
+    padding: 6px 6px !important;
+}
+
+.navigator_button_finished {
+    background-color: #bdb !important;
+}
+
+#main_text_area h4 {
+    margin-bottom: -5px;
+}
+
+/* button default */
+input[type="button"], .button_like {
+    background-color: #bbb;
+    border: none;
+    border-radius: 3px;
+    box-sizing: border-box;
+    color: #24292E;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 20px;
+    padding: 6px 16px;
+    vertical-align: middle;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+input[type="button"]:hover:not(:disabled) {
+    background-color: #ccc !important;
+}
+
+input[type="button"]:active:hover:not(:disabled) {
+    background-color: #aaa !important;
+}
+
+input[type="button"]:disabled {
+    background-color: #ccc8;
+    color: #4e535a;
+    cursor: not-allowed;
+}
+
+.button_selected {
+    outline: 2px dashed black;
+}
+
+.label_span {
+    display: inline-block;
+    width: 200px;
+    text-align: right;
+}
+
+.speaker_span { 
+    display: inline-block;
+    width: 70px;
+    text-align: left;
+}
+
+.utterance_break {
+   display: block;
+   margin: -7px 0;
+}
+
+select { 
+    width: 120px;
+}

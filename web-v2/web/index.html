@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <title>Evaluating Dialogue Quality</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Roboto&display=swap'>
+    <link rel='stylesheet' type='text/css' href='style.css?r=14'> 
+</head>
+
+<body>
+    <div style="margin-left: auto; margin-right: auto; font-size: x-large; position: absolute; z-index: -100; text-align: left;">
+        Evaluating Dialogue Quality<br>
+        <img src="img/teacher.svg" style="width: 70px;">
+        <img src="img/student.svg" style="width: 70px;">
+    </div>
+
+    </div>
+    <div id="main_text_area"></div>
+    <div id="side_panel">
+        <div id="short_instructions">
+            <h3>TODO short instructions</h3>
+
+            <h4>Grammatical:</h4>
+            The prompt is linguistically and grammatically correct and is a question.
+            
+            <h4>Relevant:</h4>
+            The prompt clearly addresses the step, ie, the only way to correctly answer the question is to complete the current step.
+            
+            <h4>Not redundant:</h4>
+            The prompt is not redundant to what the student already said in the previous step ie it makes sense to ask this question after the previous response.
+            
+            <h4>Not revealing:</h4>
+            The prompt does not reveal the exact operation to be carried out.
+        </div>
+        <div id="progress_window">
+            <input id="finish_study" type="button" value="Finish study" title="Unlocked only after finishing all sentences." disabled style="width: 100%;">
+        </div>
+    </div>
+
+    <script id="nocachescript"></script>
+    <script>
+        var randomNum = String((Math.floor(Math.random() * 10e10)));
+        document.getElementById('nocachescript').src = "web-source.js?t=" + randomNum;
+    </script>
+</body>
+
+</html>

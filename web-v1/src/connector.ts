@@ -42,7 +42,7 @@ export async function log_data(data_i: number): Promise<any> {
         SERVER_LOG_ROOT + "log",
         {
             data: JSON.stringify({
-                project: "evaluating-dialogue-quality",
+                project: "evaluating-dialogue-quality/v1",
                 uid: globalThis.uid,
                 payload: JSON.stringify(data),
             }),
