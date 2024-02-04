@@ -118,6 +118,18 @@ input[type="button"]:disabled {
     cursor: not-allowed;
 }
 
+.button_yes, .button_no {
+    margin-bottom: 10px;
+}
+
+.button_yes {
+    background-color: #cec !important;
+}
+
+.button_no {
+    background-color: #ecc !important;
+}
+
 .button_selected {
     outline: 2px dashed black;
 }
@@ -139,6 +151,15 @@ input[type="button"]:disabled {
    margin: -7px 0;
 }
 
-select { 
-    width: 120px;
+.checkbox_div {
+    user-select: none;
+    width: 90px;
+    display: inline-block;
+    border-radius: 4px;
+    background-color: #ddd;
+    font-style: normal;
+}
+.checkbox_div > label {
+    font-family: 'Courier New', Courier, monospace !important;
+    font-size: 11pt;
 }

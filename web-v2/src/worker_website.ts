@@ -23,19 +23,17 @@ let finished_questions = new Set<number>()
 function select_element(i: number, student: boolean) {
     if (student)
         return `
-        <select line_id="${i}">
-            <option></option>
-            <option>Wrong answer</option>
-            <option>Correct answer</option>
-            <option>Correct answer (wrong method)</option>
-        </select>
+        <div class="checkbox_div">
+            <input type="checkbox" id="checkbox_${i}" line_id="student_${i}">
+            <label for="checkbox_${i}">Correct</label>
+        </div>
         `
     else
         return `
-        <select line_id="${i}">
-            <option></option>
-            <option>Reveal answer</option>
-        </select>
+        <div class="checkbox_div">
+            <input type="checkbox" id="checkbox_${i}" line_id="tutor_${i}">
+            <label for="checkbox_${i}">Reveal</label>
+        </div>
         `
 }
 
@@ -43,15 +41,12 @@ export async function setup_main_question(data_i: number) {
     let data_now = globalThis.data[data_i];
     globalThis.time_start = Date.now()
     let html = await get_html("main_task.html")
-    let styled_utterance = (
-        data_now["context"] + "\nEOM\nExtra: Mark as <b>Wrong answer</b> if and only if there is no correct one."
-    ).split(/\nEOM\n/g).map(
+    let styled_utterance = data_now["context"].split(/\nEOM\n/g).map(
         (val: string, index: number) => {
-            val = select_element(index, !val.includes("Tutor")) + (
+            val = select_element(index, val.includes("Student")) + (
                 val.trim()
                     .replace(/Tutor:/g, "<b class='speaker_span'>Tutor:</b> ")
                     .replace(/Student:/g, "<b class='speaker_span'>Student:</b> ")
-                    .replace(/Extra:/g, "<b class='speaker_span'>Extra:</b> ")
             )
             return val
         }).join("<br class='utterance_break'>")
@@ -59,8 +54,21 @@ export async function setup_main_question(data_i: number) {
     html = html.replace("{{SENTENCE}}", styled_utterance)
 
 
-    let check_brighten_navigator_button = () => {
-        let is_finished = Object.keys(globalThis.data_log[data_i]["answer"]).length > 0
+    let check_brighten_navigator_button_and_show_extra_question = () => {
+        let is_student = Object.keys(globalThis.data_log[data_i]["answer"]).some((k) => k.startsWith("student_"))
+
+        $("#extra_question").toggle(is_student)
+        if (!is_student) {
+            delete globalThis.data_log[data_i]["answer"]["correct_method"]
+            $(`#button_extra_yes`).removeClass("button_selected");
+            $(`#button_extra_no`).removeClass("button_selected");
+        }
+
+        // TODO: it's more complex now
+        let some_filled = Object.keys(globalThis.data_log[data_i]["answer"]).length > 0
+        let has_student_answer = Object.keys(globalThis.data_log[data_i]["answer"]).includes("correct_method")
+        let is_finished = some_filled && (!is_student || has_student_answer)
+
         $(`#navigator_button_${data_i}`).toggleClass(
             "navigator_button_finished",
             is_finished
@@ -78,21 +86,43 @@ export async function setup_main_question(data_i: number) {
         }
     }
 
+
     main_text_area.html(html)
     await timer(10)
 
-    $("select").each((index, element) => {
-        let el_select = $(element);
-        let line_id = el_select.attr("line_id") as string;
-        el_select.on("input", () => {
-            let val = el_select.val()
-            console.log(line_id,)
-            if (val == "") {
+    $("input[type='checkbox']").each((index, element) => {
+        let el_checkbox = $(element);
+        let line_id = el_checkbox.attr("line_id") as string;
+        el_checkbox.on("input", () => {
+            let val = el_checkbox.prop('checked')
+            if (!val) {
                 delete globalThis.data_log[data_i]["answer"][line_id]
             } else {
                 globalThis.data_log[data_i]["answer"][line_id] = val
             }
-            check_brighten_navigator_button()
+            check_brighten_navigator_button_and_show_extra_question()
+            log_data(data_i)
+        })
+    })
+
+
+    $("#button_extra_yes").each((index, element) => {
+        let el_button = $(element);
+        el_button.on("click", () => {
+            el_button.addClass("button_selected");
+            $(`#button_extra_no`).removeClass("button_selected");
+            globalThis.data_log[data_i]["answer"]["correct_method"] = true
+            check_brighten_navigator_button_and_show_extra_question()
+            log_data(data_i)
+        })
+    })
+    $("#button_extra_no").each((index, element) => {
+        let el_button = $(element);
+        el_button.on("click", () => {
+            el_button.addClass("button_selected");
+            $(`#button_extra_yes`).removeClass("button_selected");
+            globalThis.data_log[data_i]["answer"]["correct_method"] = false
+            check_brighten_navigator_button_and_show_extra_question()
             log_data(data_i)
         })
     })
