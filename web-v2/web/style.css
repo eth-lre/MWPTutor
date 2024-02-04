@@ -136,7 +136,7 @@ input[type="button"]:disabled {
 
 .label_span {
     display: inline-block;
-    width: 200px;
+    width: 500px;
     text-align: right;
 }
 

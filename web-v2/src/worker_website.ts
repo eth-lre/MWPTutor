@@ -24,14 +24,14 @@ function select_element(i: number, student: boolean) {
     if (student)
         return `
         <div class="checkbox_div">
-            <input type="checkbox" id="checkbox_${i}" line_id="student_${i}">
+            <input type="checkbox" id="checkbox_${i}" line_id="student_check_${i}">
             <label for="checkbox_${i}">Correct</label>
         </div>
         `
     else
         return `
         <div class="checkbox_div">
-            <input type="checkbox" id="checkbox_${i}" line_id="tutor_${i}">
+            <input type="checkbox" id="checkbox_${i}" line_id="tutor_check_${i}">
             <label for="checkbox_${i}">Reveal</label>
         </div>
         `
@@ -55,19 +55,20 @@ export async function setup_main_question(data_i: number) {
 
 
     let check_brighten_navigator_button_and_show_extra_question = () => {
-        let is_student = Object.keys(globalThis.data_log[data_i]["answer"]).some((k) => k.startsWith("student_"))
+        let some_student_correct = Object.keys(globalThis.data_log[data_i]["answer"]).some((k) => k.startsWith("student_check_"))
+        let some_tutor_reveal = Object.keys(globalThis.data_log[data_i]["answer"]).some((k) => k.startsWith("tutor_check_"))
+        $("#student_correct_method_div").toggle(some_student_correct)
 
-        $("#extra_question").toggle(is_student)
-        if (!is_student) {
-            delete globalThis.data_log[data_i]["answer"]["correct_method"]
-            $(`#button_extra_yes`).removeClass("button_selected");
-            $(`#button_extra_no`).removeClass("button_selected");
+        let extra_student_correct = globalThis.data_log[data_i]["answer"]["extra_student_correct"] || false
+        let extra_tutor_reveal = globalThis.data_log[data_i]["answer"]["extra_tutor_reveal"] || false
+
+        let required_extra = 2
+        if (some_student_correct) {
+            required_extra += 1
         }
+        let extra_fulfilled = Object.keys(globalThis.data_log[data_i]["answer"]).filter((x) => x.startsWith("extra_")).length >= required_extra
+        let is_finished = extra_fulfilled && (!some_student_correct == !extra_student_correct) && (!some_tutor_reveal == !extra_tutor_reveal)
 
-        // TODO: it's more complex now
-        let some_filled = Object.keys(globalThis.data_log[data_i]["answer"]).length > 0
-        let has_student_answer = Object.keys(globalThis.data_log[data_i]["answer"]).includes("correct_method")
-        let is_finished = some_filled && (!is_student || has_student_answer)
 
         $(`#navigator_button_${data_i}`).toggleClass(
             "navigator_button_finished",
@@ -86,6 +87,28 @@ export async function setup_main_question(data_i: number) {
         }
     }
 
+    let html_buttons = ""
+    function setup_button_hook_static(id_name: string, label_name: string) {
+        let extra_class_no = ""
+        let extra_class_yes = ""
+        if (globalThis.data_log[data_i]["answer"].hasOwnProperty(id_name)) {
+            if(globalThis.data_log[data_i]["answer"][id_name]) {
+                extra_class_yes = "button_selected"
+            } else {
+                extra_class_no = "button_selected"
+            }
+        }
+        html_buttons += `<div id=${id_name}_div>`
+        html_buttons += `<span class="label_span">${label_name}</span> `
+        html_buttons += `<input type="button" id_val="extra_${id_name}" value="Yes" id="extra_${id_name}_yes" class="button_yes ${extra_class_yes}"> `
+        html_buttons += `<input type="button" id_val="extra_${id_name}" value="No" id="extra_${id_name}_no" class="button_no ${extra_class_no}"> `
+        html_buttons += "</div>\n"
+    }
+    setup_button_hook_static("tutor_reveal", "Did the tutor ever reveal the correct answer?")
+    setup_button_hook_static("student_correct", "Did the student arrive at the corrrect answer?")
+    setup_button_hook_static("student_correct_method", "Did the student arrive at the answer via a correct method?")
+
+    html = html.replace("{{BUTTONS_SECTION}}", html_buttons)
 
     main_text_area.html(html)
     await timer(10)
@@ -105,27 +128,30 @@ export async function setup_main_question(data_i: number) {
         })
     })
 
+    $(".button_yes").each((index, element) => {
+        let el_button = $(element);
+        let id_val = el_button.attr("id_val") as string;
+        el_button.on("click", () => {
+            el_button.addClass("button_selected");
+            $(`#${id_val}_no`).removeClass("button_selected");
+            globalThis.data_log[data_i]["answer"][id_val] = true
+            check_brighten_navigator_button_and_show_extra_question()
+            log_data(data_i)
+        })
+    })
+    $(".button_no").each((index, element) => {
+        let el_button = $(element);
+        let id_val = el_button.attr("id_val") as string;
+        el_button.on("click", () => {
+            el_button.addClass("button_selected");
+            $(`#${id_val}_yes`).removeClass("button_selected");
+            globalThis.data_log[data_i]["answer"][id_val] = false
+            check_brighten_navigator_button_and_show_extra_question()
+            log_data(data_i)
+        })
+    })
 
-    $("#button_extra_yes").each((index, element) => {
-        let el_button = $(element);
-        el_button.on("click", () => {
-            el_button.addClass("button_selected");
-            $(`#button_extra_no`).removeClass("button_selected");
-            globalThis.data_log[data_i]["answer"]["correct_method"] = true
-            check_brighten_navigator_button_and_show_extra_question()
-            log_data(data_i)
-        })
-    })
-    $("#button_extra_no").each((index, element) => {
-        let el_button = $(element);
-        el_button.on("click", () => {
-            el_button.addClass("button_selected");
-            $(`#button_extra_yes`).removeClass("button_selected");
-            globalThis.data_log[data_i]["answer"]["correct_method"] = false
-            check_brighten_navigator_button_and_show_extra_question()
-            log_data(data_i)
-        })
-    })
+    check_brighten_navigator_button_and_show_extra_question()
 }
 
 export async function setup_navigator() {
