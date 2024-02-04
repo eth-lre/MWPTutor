@@ -43,12 +43,15 @@ export async function setup_main_question(data_i: number) {
     let data_now = globalThis.data[data_i];
     globalThis.time_start = Date.now()
     let html = await get_html("main_task.html")
-    let styled_utterance = data_now["context"].split(/\nEOM\n/g).map(
+    let styled_utterance = (
+        data_now["context"] + "\nEOM\nExtra: Mark as <b>Wrong answer</b> if and only if there is no correct one."
+    ).split(/\nEOM\n/g).map(
         (val: string, index: number) => {
-            val = select_element(index, val.includes("Student")) + (
+            val = select_element(index, !val.includes("Tutor")) + (
                 val.trim()
                     .replace(/Tutor:/g, "<b class='speaker_span'>Tutor:</b> ")
                     .replace(/Student:/g, "<b class='speaker_span'>Student:</b> ")
+                    .replace(/Extra:/g, "<b class='speaker_span'>Extra:</b> ")
             )
             return val
         }).join("<br class='utterance_break'>")
@@ -83,7 +86,7 @@ export async function setup_main_question(data_i: number) {
         let line_id = el_select.attr("line_id") as string;
         el_select.on("input", () => {
             let val = el_select.val()
-            console.log(line_id, )
+            console.log(line_id,)
             if (val == "") {
                 delete globalThis.data_log[data_i]["answer"][line_id]
             } else {
