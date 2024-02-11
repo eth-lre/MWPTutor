@@ -109,7 +109,7 @@ export async function setup_main_question(data_i: number) {
         html_buttons += "</div>\n"
     }
     setup_button_hook_static("tutor_reveal", "Did the tutor ever reveal the correct answer?")
-    setup_button_hook_static("student_correct", "Did the student arrive at the corrrect answer?")
+    setup_button_hook_static("student_correct", "Did the student arrive at the correct answer?")
     setup_button_hook_static("student_correct_method", "Did the student arrive at the answer via a correct method?")
 
     html = html.replace("{{BUTTONS_SECTION}}", html_buttons)
