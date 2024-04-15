@@ -35,7 +35,7 @@ export async function setup_main_question(data_i: number) {
     (
         data_now["context"]
         .replace(/\n\n/g, "<br class='utterance_break'>")
-        .replace(/\nEOM\n/g, "<br class='utterance_break'>")
+        .replace(/\n\n/g, "<br class='utterance_break'>")
         .replace(/Tutor:/g, "<b class='speaker_span'>Tutor:</b> ")
         .replace(/Student:/g, "<b class='speaker_span'>Student:</b> ")
     ) + (
