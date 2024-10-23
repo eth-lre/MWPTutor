@@ -104,7 +104,7 @@ class MathTutor(Tutor):
                 self.next_utterance=RHS+" is correct, well done. What is the next step?"
             else:
                 self.status="TERMINATE"
-                self.next_utterance=RHS+" is the correct answer to the problem. Well done!!! Don't hesitate to contack me again if you have any troubles."
+                self.next_utterance=RHS+" is the correct answer to the problem. Well done!!! Don't hesitate to contact me again if you have any troubles."
             return True
         if not no_convert and "Can you convert the answer" not in self.next_utterance:
             for u in unit_map:
@@ -114,7 +114,7 @@ class MathTutor(Tutor):
                             self.next_utterance="Can you convert the answer to "+t+" instead of "+u+"?"
                             return True
         
-        print([RHS],findallnums_match(self.last_utterance))
+        # print([RHS],findallnums_match(self.last_utterance))
         return False
     def start_conversation(self):
         if not self.align_solution(self.metadata["solution"]):
@@ -187,7 +187,7 @@ class MathTutor(Tutor):
 
         # First check for RHS Match
         original_solution_node=self.solution_node
-        print(original_solution_node)
+        # print(original_solution_node)
         for followup in original_solution_node:
             self.solution_node=followup
             if self.check_correct(no_convert=True):
@@ -316,7 +316,7 @@ class LiveTutor(Tutor):
                 return True
     def check_correct(self, no_convert=False):
         RHS=get_eq_RHS(findall("<<.*?=.*?>>",self.solution_node["step"][0])[0]).replace(",","")
-        print(RHS, findallnums_match(self.last_utterance))
+        # print(RHS, findallnums_match(self.last_utterance))
         if RHS in findallnums_match(self.last_utterance):
             if len(self.last_utterance)<50 or len(findallnums_match(self.last_utterance))==1 or self.check_correct_llm(self.last_utterance, self.solution_node["step"][0],self.solution_node["bottom_out"]):
                 # proceed to the next step
@@ -330,7 +330,7 @@ class LiveTutor(Tutor):
                     self.next_utterance=RHS+" is the correct answer to the problem. Well done!!! Don't hesitate to contact me again if you have any troubles."
                 return True
             else:
-                print("Secondary Fail")
+                # print("Secondary Fail")
                 if self.next_utterance!="Can you repeat only your final answer?":
                     self.next_utterance="Can you repeat only your final answer?"
                     return True
@@ -500,8 +500,8 @@ class LiveTutor(Tutor):
             last=res[0]["message"]["content"]
         choice=int(last)-1
         last=self.int_check()
-        print(choice)
-        print(options)
+        # print(choice)
+        # print(options)
         RHS=get_eq_RHS(findall("<<.*?=.*?>>",options[choice])[0]).replace(",","")
         if RHS in findallnums_match(self.last_utterance):
             return choice
