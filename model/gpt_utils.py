@@ -18,7 +18,6 @@ def call_gpt4_api(history, prompt, repeat: int = 1, retries: int = 3):
             pass
         sleep(2**4-retries)
         return call_gpt4_api(history, prompt, repeat, retries-1)
-    print(history)
     return response["choices"]
 
 def call_chatgpt_api(history, prompt, repeat: int = 1, retries: int = 3):
